@@ -10,6 +10,10 @@ import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis, { RedisClientOptions } from '@keyv/redis';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { TokenModule } from './token/token.module';
+import { RsaModule } from './rsa/rsa.module';
+import { AiModule } from './ai/ai.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -29,7 +33,7 @@ import { AuthGuard } from './auth/auth.guard';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<number>('JWT_EXPIRATION_TIME'),
+          expiresIn: configService.get<string>('JWT_EXPIRATION_TIME') as any,
         },
       }),
       inject: [ConfigService],
@@ -46,8 +50,20 @@ import { AuthGuard } from './auth/auth.guard';
         ],
       }),
     }),
+    HttpModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        timeout: configService.get<number>('HTTP_TIMEOUT') || 5000,
+        maxRedirects: 5,
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
     AuthModule,
+    TokenModule,
+    RsaModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,0 +1,3 @@
+Translate this text to Vietnamese: "{{text}}"
+
+Provide ONLY the translation, nothing else.

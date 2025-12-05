@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { BaseSchema } from './base.schema';
 import { Exclude } from 'class-transformer';
+import { Token, TokenSchema } from './token.schema';
 
 @Schema()
 export class User extends BaseSchema {
@@ -16,6 +17,9 @@ export class User extends BaseSchema {
   })
   @Prop()
   password: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Token' }] })
+  tokens: Token[];
 }
 
 export type UserDocument = HydratedDocument<User>;

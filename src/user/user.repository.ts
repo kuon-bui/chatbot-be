@@ -14,6 +14,14 @@ export class UserRepository {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findOneById(id: string): Promise<UserDocument | null> {
+    return this.userModel.findById(id).exec();
+  }
+
+  async findOneByIdWithTokens(id: string): Promise<UserDocument | null> {
+    return this.userModel.findById(id).populate('tokens').exec();
+  }
+
   async create(user: CreateUserDto): Promise<UserDocument> {
     const newUser = new this.userModel(user);
     return newUser.save();
