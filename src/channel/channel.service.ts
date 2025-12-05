@@ -22,4 +22,23 @@ export class ChannelService {
 
     return plainToInstance(Channel, channel.toObject());
   }
+
+  async getChannelById(channelId: string): Promise<Channel> {
+    const channelObjectId = new Types.ObjectId(channelId);
+    const channel = await this.channelRepository.findById(channelObjectId);
+    if (!channel) {
+      throw new Error('Channel not found');
+    }
+
+    return plainToInstance(Channel, channel.toObject());
+  }
+
+  async updateChannelName(channelId: Types.ObjectId, newName: string): Promise<Channel> {
+    const updatedChannel = await this.channelRepository.updateName(channelId, newName);
+    if (!updatedChannel) {
+      throw new Error('Failed to update channel name');
+    }
+
+    return plainToInstance(Channel, updatedChannel.toObject());
+  }
 }

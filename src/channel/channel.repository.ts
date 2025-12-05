@@ -21,4 +21,12 @@ export class ChannelRepository {
   async findByUserId(userId: Types.ObjectId): Promise<ChannelDocument | null> {
     return this.channelModel.findOne({ userId }).exec();
   }
+
+  async updateName(id: Types.ObjectId, newName: string): Promise<ChannelDocument | null> {
+    return this.channelModel.findByIdAndUpdate(
+      id,
+      { name: newName },
+      { new: true }
+    ).exec();
+  }
 }

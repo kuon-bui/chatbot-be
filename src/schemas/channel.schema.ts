@@ -9,6 +9,8 @@ export class Channel extends BaseSchema {
   @Transform(({ value }) => value?.toString(), { toPlainOnly: true })
   userId: Types.ObjectId;
 
+  @Prop({ required: false, type: String, default: 'New Channel' })
+  name: string;
 }
 
 export type ChannelDocument = HydratedDocument<Channel>;
