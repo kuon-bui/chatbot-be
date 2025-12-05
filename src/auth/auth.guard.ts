@@ -9,7 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator';
-import { PayloadJwtDto } from './dto/payload-jwt.dto';
+import { UserClaimsDto } from './dto/payload-jwt.dto';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync<PayloadJwtDto>(token);
+      const payload = await this.jwtService.verifyAsync<UserClaimsDto>(token);
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       if (await this.cacheManager.get<boolean>(payload.jti)) {

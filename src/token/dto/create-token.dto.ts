@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { ForModelEnum } from "src/common/enums/for-model.enum";
+import { ForModelEnum } from "@enums/for-model.enum";
 
 export class CreateTokenDto {
   @IsString()

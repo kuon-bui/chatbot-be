@@ -1,9 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { TokenService } from './token.service';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { User } from 'src/schemas/user.schema';
+import { AuthenticatedUser } from 'src/common/decorators/current-user.decorator';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { PayloadJwtDto } from 'src/auth/dto/payload-jwt.dto';
+import { UserClaimsDto } from 'src/auth/dto/payload-jwt.dto';
 
 @Controller('tokens')
 export class TokenController {
@@ -13,7 +12,7 @@ export class TokenController {
 
   @Post()
   async createToken(
-    @CurrentUser() user: PayloadJwtDto,
+    @AuthenticatedUser() user: UserClaimsDto,
     @Body() createTokenDto: CreateTokenDto,
   ) {
     return this.tokenService.createToken(user, createTokenDto);

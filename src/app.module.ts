@@ -14,6 +14,9 @@ import { TokenModule } from './token/token.module';
 import { RsaModule } from './rsa/rsa.module';
 import { AiModule } from './ai/ai.module';
 import { HttpModule } from '@nestjs/axios';
+import { ChannelModule } from './channel/channel.module';
+import { MessageModule } from './message/message.module';
+import { BotUserModule } from './bot-user/bot-user.module';
 
 @Module({
   imports: [
@@ -64,6 +67,9 @@ import { HttpModule } from '@nestjs/axios';
     TokenModule,
     RsaModule,
     AiModule,
+    ChannelModule,
+    MessageModule,
+    BotUserModule,
   ],
   controllers: [AppController],
   providers: [

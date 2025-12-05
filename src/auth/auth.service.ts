@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
-import { PayloadJwtDto } from './dto/payload-jwt.dto';
+import { UserClaimsDto } from './dto/payload-jwt.dto';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(certificate.email);
 
     if (user && await bcrypt.compare(certificate.password, user.password)) {
-      const payload: PayloadJwtDto = {
+      const payload: UserClaimsDto = {
         sub: user._id.toString(),
         name: user.name,
         email: user.email,

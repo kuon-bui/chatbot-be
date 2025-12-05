@@ -20,6 +20,11 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@enums/*":["src/common/enums/*"],
+      "@decorators/*":["src/common/decorators/*"],
+      "@schemas/*":["src/schemas/*"],
+    }
   }
 }
