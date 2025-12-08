@@ -1,7 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { User } from 'src/schemas/user.schema';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(
@@ -9,6 +12,21 @@ export class UserController {
   ) { }
 
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully created',
+    type: User,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - validation failed',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflict - email already exists',
+  })
   async registerUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }

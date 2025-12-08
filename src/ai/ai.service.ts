@@ -15,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { ChannelRepository } from 'src/channel/channel.repository';
 import { MessageRepository } from 'src/message/message.repository';
 import { SaveMessageDto } from 'src/message/dto/save-message.dto';
+import { Message } from '@schemas/message.schema';
 
 @Injectable()
 export class AiService implements OnModuleInit {
@@ -131,7 +132,7 @@ export class AiService implements OnModuleInit {
     return response.data.choices;
   }
 
-  async chatWithAi(userId: Types.ObjectId, channelId: Types.ObjectId, message: string) {
+  async chatWithAi(userId: Types.ObjectId, channelId: Types.ObjectId, message: string): Promise<Message[]> {
     const userDoc = await this.userRepository.findOneByIdWithTokens(userId);
     if (!userDoc) {
       throw new Error('User not found');
@@ -206,9 +207,9 @@ export class AiService implements OnModuleInit {
     });
 
     // Save messages to database
-    await this.messageRepository.create(channel._id, userId, { content: message });
-    await this.messageRepository.saveMany(channel._id, aiBotUserId, newMessage);
+    const userMessage = await this.messageRepository.create(channel._id, userId, { content: message });
+    const aiMessages = await this.messageRepository.saveMany(channel._id, aiBotUserId, newMessage);
 
-    return response.data.choices;
+    return [userMessage.toObject(), ...aiMessages.map(msg => msg.toObject())];
   }
 }

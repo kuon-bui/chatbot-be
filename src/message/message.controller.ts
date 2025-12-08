@@ -1,9 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { SaveMessageDto } from './dto/save-message.dto';
 import { AuthenticatedUser } from '@decorators/current-user.decorator';
 import { UserClaimsDto } from 'src/auth/dto/payload-jwt.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody } from '@nestjs/swagger';
+import { Message } from 'src/schemas/message.schema';
 
+@ApiTags('Messages')
+@ApiBearerAuth('JWT-auth')
 @Controller('channels/:channelId/messages')
 export class MessageController {
   constructor(
@@ -11,13 +15,44 @@ export class MessageController {
   ) { }
 
   @Get()
+  @ApiOperation({ summary: 'Get all messages in a channel' })
+  @ApiParam({ name: 'channelId', description: 'Channel ID', example: '507f1f77bcf86cd799439011' })
+  @ApiResponse({
+    status: 200,
+    description: 'Messages retrieved successfully',
+    type: [Message],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async getMessages(
     @Param('channelId') channelId: string,
   ) {
-    return this.messageService.getMessagesByChannelId(channelId);
+    try {
+      return this.messageService.getMessagesByChannelId(channelId);
+    } catch (error) {
+      throw new HttpException('Failed to retrieve messages', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new message in a channel' })
+  @ApiParam({ name: 'channelId', description: 'Channel ID', example: '507f1f77bcf86cd799439011' })
+  @ApiBody({ type: SaveMessageDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Message created successfully',
+    type: Message,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Channel not found',
+  })
   async createMessage(
     @AuthenticatedUser() user: UserClaimsDto,
     @Param('channelId') channelId: string,

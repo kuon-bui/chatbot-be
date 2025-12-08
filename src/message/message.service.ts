@@ -22,8 +22,12 @@ export class MessageService {
   }
 
   async getMessagesByChannelId(channelId: Types.ObjectId | string) {
-    const id = typeof channelId === 'string' ? new Types.ObjectId(channelId) : channelId;
-    const messages = await this.messageRepository.findByChannelId(id);
-    return plainToInstance(Message, messages.map(message => message.toObject()));
+    try {
+      const id = typeof channelId === 'string' ? new Types.ObjectId(channelId) : channelId;
+      const messages = await this.messageRepository.findByChannelId(id);
+      return plainToInstance(Message, messages.map(message => message.toObject()));
+    } catch (error) {
+      throw error;
+    }
   }
 }

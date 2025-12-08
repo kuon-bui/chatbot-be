@@ -9,6 +9,7 @@ import { ChannelModule } from 'src/channel/channel.module';
 @Module({
   imports: [UserModule, MessageModule, BotUserModule, ChannelModule],
   providers: [AiService],
-  controllers: [AiController]
+  controllers: [AiController],
+  exports: [AiService],
 })
 export class AiModule { }

@@ -5,7 +5,40 @@ import { ChatService } from './chat.service';
 import { Logger } from '@nestjs/common';
 import { Message } from '@schemas/message.schema';
 import { MessageDto } from './dto/message.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+/**
+ * WebSocket Gateway for real-time chat functionality
+ * 
+ * Connection URL: ws://localhost:3000/ws
+ * Namespace: /chat
+ * 
+ * Authentication:
+ * - Include JWT token in handshake auth: { auth: { token: 'your-jwt-token' } }
+ * - Or in headers: { headers: { authorization: 'Bearer your-jwt-token' } }
+ * 
+ * Events:
+ * 
+ * Client -> Server:
+ * - 'chat': Send a message to a channel
+ *   Payload: { channelId: string, content: string }
+ *   Response: { event: 'chat', data: Message[] }
+ * 
+ * - 'listMessages': Get all messages in a channel
+ *   Payload: { channelId: string }
+ *   Response: { event: 'listMessages', data: Message[] }
+ * 
+ * Server -> Client:
+ * - 'message': Welcome message on connection
+ *   Payload: string
+ * 
+ * - 'chat': Response with updated messages after sending
+ *   Payload: Message[]
+ * 
+ * - 'listMessages': Response with all messages in channel
+ *   Payload: Message[]
+ */
+@ApiTags('WebSocket')
 @ws.WebSocketGateway({
   namespace: '/chat',
   path: '/ws',
