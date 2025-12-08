@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
-import { UserClaimsDto } from './dto/payload-jwt.dto';
+import { UserClaimsDto } from '../common/dto/payload-jwt.dto';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {

@@ -1,4 +1,4 @@
-import { User } from "src/schemas/user.schema";
+import { User } from "src/common/schemas/user.schema";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 

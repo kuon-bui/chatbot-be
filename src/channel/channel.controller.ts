@@ -1,8 +1,8 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ChannelService } from './channel.service';
-import { Channel } from '@schemas/channel.schema';
+import { Channel } from 'src/common/schemas/channel.schema';
 import { AuthenticatedUser } from '@decorators/current-user.decorator';
-import { UserClaimsDto } from 'src/auth/dto/payload-jwt.dto';
+import { UserClaimsDto } from 'src/common/dto/payload-jwt.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 
 @ApiTags('Channels')

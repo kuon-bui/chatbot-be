@@ -3,7 +3,7 @@ import { ChannelService } from './channel.service';
 import { ChannelRepository } from './channel.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Channel } from 'diagnostics_channel';
-import { ChannelSchema } from '@schemas/channel.schema';
+import { ChannelSchema } from 'src/common/schemas/channel.schema';
 import { ChannelController } from './channel.controller';
 
 @Module({

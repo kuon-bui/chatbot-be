@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { MessageRepository } from './message.repository';
-import { SaveMessageDto } from './dto/save-message.dto';
+import { SaveMessageDto } from '../common/dto/save-message.dto';
 import { plainToInstance } from 'class-transformer';
 import { Types } from 'mongoose';
-import { Message } from '@schemas/message.schema';
+import { Message } from 'src/common/schemas/message.schema';
 
 @Injectable()
 export class MessageService {

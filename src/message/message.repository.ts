@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Message, MessageDocument } from "@schemas/message.schema";
+import { Message, MessageDocument } from "src/common/schemas/message.schema";
 import { Model, Types } from "mongoose";
-import { SaveMessageDto } from "./dto/save-message.dto";
+import { SaveMessageDto } from "../common/dto/save-message.dto";
 
 
 @Injectable()

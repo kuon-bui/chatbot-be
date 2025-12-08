@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TokenRepository } from './token.repository';
-import { Token } from '@schemas/token.schema';
+import { Token } from 'src/common/schemas/token.schema';
 import { plainToInstance } from 'class-transformer';
-import { CreateTokenDto } from './dto/create-token.dto';
+import { CreateTokenDto } from '../common/dto/create-token.dto';
 import { RsaService } from 'src/rsa/rsa.service';
-import { UserClaimsDto } from 'src/auth/dto/payload-jwt.dto';
+import { UserClaimsDto } from 'src/common/dto/payload-jwt.dto';
 import { Types } from 'mongoose';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Channel, ChannelDocument } from "@schemas/channel.schema";
+import { Channel, ChannelDocument } from "src/common/schemas/channel.schema";
 import { Model, Types } from "mongoose";
 
 @Injectable()

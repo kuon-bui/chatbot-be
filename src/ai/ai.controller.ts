@@ -1,9 +1,9 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { AuthenticatedUser } from 'src/common/decorators/current-user.decorator';
-import { UserClaimsDto } from 'src/auth/dto/payload-jwt.dto';
+import { AuthenticatedUser } from '@decorators/current-user.decorator';
 import { Types } from 'mongoose';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { UserClaimsDto } from '@dto/payload-jwt.dto';
 
 @ApiTags('AI')
 @ApiBearerAuth('JWT-auth')

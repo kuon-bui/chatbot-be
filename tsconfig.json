@@ -24,7 +24,8 @@
     "paths": {
       "@enums/*":["src/common/enums/*"],
       "@decorators/*":["src/common/decorators/*"],
-      "@schemas/*":["src/schemas/*"],
+      "@schemas/*":["src/common/schemas/*"],
+      "@dto/*":["src/common/dto/*"]
     }
   }
 }
