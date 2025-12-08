@@ -3,7 +3,8 @@ import { AiService } from './ai.service';
 import { AuthenticatedUser } from '@decorators/current-user.decorator';
 import { Types } from 'mongoose';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { UserClaimsDto } from '@dto/payload-jwt.dto';
+import { UserClaimsDto } from '@dto';
+
 
 @ApiTags('AI')
 @ApiBearerAuth('JWT-auth')

@@ -1,10 +1,9 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
-import { MessageService } from './message.service';
-import { SaveMessageDto } from '../common/dto/save-message.dto';
-import { AuthenticatedUser } from '@decorators/current-user.decorator';
-import { UserClaimsDto } from 'src/common/dto/payload-jwt.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody } from '@nestjs/swagger';
-import { Message } from 'src/common/schemas/message.schema';
+import { MessageService } from './message.service';
+import { AuthenticatedUser } from '@decorators/current-user.decorator';
+import { SaveMessageDto, UserClaimsDto } from '@dto';
+import { Message } from '@schemas';
 
 @ApiTags('Messages')
 @ApiBearerAuth('JWT-auth')

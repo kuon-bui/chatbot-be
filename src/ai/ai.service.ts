@@ -1,21 +1,21 @@
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import { Inject, Injectable, OnModuleInit, Type } from '@nestjs/common';
-import { ForModelEnum } from '@enums/for-model.enum';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { RsaService } from 'src/rsa/rsa.service';
 import { UserRepository } from 'src/user/user.repository';
-import { DeepseekChoice, DeepSeekResponseDto } from '../common/dto/deepseek-response.dto';
+import { DeepseekChoice, DeepSeekResponseDto } from '../common/dto/deepseek/deepseek-response.dto';
 import Mustache from 'mustache';
 import * as fs from 'fs';
 import * as path from 'path';
 import { BotUserService } from 'src/bot-user/bot-user.service';
 import { Types } from 'mongoose';
-import { DeepseekRequestDto, DeepseekRole } from '../common/dto/deepseek-request.dto';
+import { DeepseekRequestDto, DeepseekRole } from '../common/dto/deepseek/deepseek-request.dto';
 import { ConfigService } from '@nestjs/config';
 import { ChannelRepository } from 'src/channel/channel.repository';
 import { MessageRepository } from 'src/message/message.repository';
-import { SaveMessageDto } from 'src/common/dto/save-message.dto';
-import { Message } from 'src/common/schemas/message.schema';
+import { SaveMessageDto } from '@dto';
+import { Message } from '@schemas';
+import { ForModelEnum } from '@enums';
 
 @Injectable()
 export class AiService implements OnModuleInit {

@@ -1,8 +1,8 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto, SignInResponseDto } from 'src/user/dto/signin.dto';
-import { Public } from 'src/common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { SignInDto, SignInResponseDto } from '@dto';
+import { Public } from '@decorators/public.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')

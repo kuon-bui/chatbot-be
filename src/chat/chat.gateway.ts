@@ -3,9 +3,9 @@ import * as ws from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger } from '@nestjs/common';
-import { Message } from 'src/common/schemas/message.schema';
 import { ApiTags } from '@nestjs/swagger';
-import { MessageDto } from 'src/common/dto/message.dto';
+import { MessageDto } from '@dto';
+import { Message } from '@schemas';
 
 /**
  * WebSocket Gateway for real-time chat functionality
@@ -91,9 +91,10 @@ export class ChatGateway implements ws.OnGatewayConnection, ws.OnGatewayInit, ws
   }
 
   @ws.SubscribeMessage('listMessages')
-  async listAllMessagesInChannel(@ws.MessageBody("channelId") channelId: string): Promise<ws.WsResponse<Message[]>> {
+  async listAllMessagesInChannel(
+    @ws.MessageBody("channelId") channelId: string
+  ): Promise<ws.WsResponse<Message[]>> {
     const messages = await this.chatService.listAllMessagesInChannel(channelId);
     return { event: 'listMessages', data: messages };
   }
-
 }

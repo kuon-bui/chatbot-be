@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { TokenService } from './token.service';
 import { AuthenticatedUser } from 'src/common/decorators/current-user.decorator';
-import { CreateTokenDto } from '../common/dto/create-token.dto';
-import { UserClaimsDto } from 'src/common/dto/payload-jwt.dto';
+import { CreateTokenDto } from '../common/dto/token/create-token.dto';
+import { UserClaimsDto } from '@dto/jwt/payload-jwt.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { Token } from 'src/common/schemas/token.schema';
 
