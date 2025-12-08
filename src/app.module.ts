@@ -17,6 +17,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ChannelModule } from './channel/channel.module';
 import { MessageModule } from './message/message.module';
 import { BotUserModule } from './bot-user/bot-user.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { BotUserModule } from './bot-user/bot-user.module';
     ChannelModule,
     MessageModule,
     BotUserModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

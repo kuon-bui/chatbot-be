@@ -32,7 +32,10 @@ export class MessageRepository {
   async findByChannelId(channelId: Types.ObjectId): Promise<MessageDocument[]> {
     return this.messageModel.find({
       channel: channelId,
-    }).populate('sender').populate('channel').exec();
+    })
+      .populate('sender')
+      .populate('channel')
+      .sort({ createdAt: -1 })
+      .exec();
   }
-
 };
