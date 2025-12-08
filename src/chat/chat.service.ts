@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { Message } from '@schemas';
+import { Message } from '@schemas/index';
 import { Types } from 'mongoose';
 import { AiService } from 'src/ai/ai.service';
 import { MessageService } from 'src/message/message.service';

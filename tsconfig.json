@@ -22,10 +22,10 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@enums":["src/common/enums/index.ts"],
+      "@enums/*":["src/common/enums/*"],
       "@decorators/*":["src/common/decorators/*"],
-      "@schemas":["src/common/schemas/index.ts"],
-      "@dto":["src/common/dto/index.ts"]
+      "@schemas/*":["src/common/schemas/*"],
+      "@dto/*":["src/common/dto/*"]
     }
   }
 }

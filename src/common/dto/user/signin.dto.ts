@@ -1,4 +1,4 @@
-import { User } from "@schemas";
+import { User } from '@schemas/index';
 
 export class SignInDto {
   email: string;

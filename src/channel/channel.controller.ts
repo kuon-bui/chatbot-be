@@ -2,7 +2,7 @@ import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { Channel } from 'src/common/schemas/channel.schema';
 import { AuthenticatedUser } from '@decorators/current-user.decorator';
-import { UserClaimsDto } from '@dto';
+import { UserClaimsDto } from '@dto/index';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 
 @ApiTags('Channels')

@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { User } from 'src/common/schemas/user.schema';
-import { CreateUserDto } from '@dto';
+import { CreateUserDto } from '@dto/index';
 
 @ApiTags('Users')
 @Controller('users')

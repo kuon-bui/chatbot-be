@@ -3,8 +3,8 @@ import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
-import { Role } from '@enums/role.enum';
 import { Types } from 'mongoose';
+import { Role } from '@enums/role.enum';
 
 @Injectable()
 export class BotUserService implements OnModuleInit {

@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { TokenRepository } from './token.repository';
 import { Token } from 'src/common/schemas/token.schema';
 import { plainToInstance } from 'class-transformer';
-import { CreateTokenDto } from '../common/dto/token/create-token.dto';
 import { RsaService } from 'src/rsa/rsa.service';
-import { UserClaimsDto } from '@dto/jwt/payload-jwt.dto';
 import { Types } from 'mongoose';
+import { CreateTokenDto, UserClaimsDto } from '@dto/index';
 
 @Injectable()
 export class TokenService {

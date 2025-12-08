@@ -1,6 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto, SignInResponseDto } from 'src/user/dto/signin.dto';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
@@ -8,6 +7,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
 import { UserClaimsDto } from '../common/dto/jwt/payload-jwt.dto';
 import { ConfigService } from '@nestjs/config';
+import { SignInDto, SignInResponseDto } from '@dto/index';
 @Injectable()
 export class AuthService {
   constructor(
