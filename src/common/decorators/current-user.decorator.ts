@@ -1,9 +1,18 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { UserClaimsDto } from '@dto/index';
+import { Request } from "@interfaces";
+import { UserClaimsDto } from "@dto";
+import { User } from "@schemas/user.schema";
 
 export const AuthenticatedUser = createParamDecorator(
-  (data: any, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    return request.user as UserClaimsDto;
+  (data: any, ctx: ExecutionContext): UserClaimsDto => {
+    const request = ctx.switchToHttp().getRequest<Request>();
+    return request.userClaims;
+  }
+);
+
+export const CurrentUser = createParamDecorator(
+  (data: any, ctx: ExecutionContext): User => {
+    const request = ctx.switchToHttp().getRequest<Request>();
+    return request.user;
   }
 );

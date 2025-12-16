@@ -3,7 +3,7 @@ import { User } from 'src/common/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { UserRepository } from './user.repository';
-import { CreateUserDto } from '@dto/index';
+import { CreateUserDto } from '@dto';
 
 @Injectable()
 export class UserService {

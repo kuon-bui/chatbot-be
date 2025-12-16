@@ -22,10 +22,11 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@enums/*":["src/common/enums/*"],
+      "@enums":["src/common/enums/index"],
       "@decorators/*":["src/common/decorators/*"],
       "@schemas/*":["src/common/schemas/*"],
-      "@dto/*":["src/common/dto/*"]
+      "@dto":["src/common/dto/index"],
+      "@interfaces":["src/common/interfaces/index"],
     }
   }
 }

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { Role } from '@enums/role.enum';
+import { Role } from '@enums';
 
 @Injectable()
 export class BotUserService implements OnModuleInit {

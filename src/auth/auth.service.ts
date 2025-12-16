@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
@@ -7,7 +7,10 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
 import { UserClaimsDto } from '../common/dto/jwt/payload-jwt.dto';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto, SignInResponseDto } from '@dto/index';
+import { SignInDto, SignInResponseDto } from '@dto';
+import { User } from '@schemas/user.schema';
+import { Profile } from 'passport';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,24 +20,35 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
-  async login(certificate: SignInDto): Promise<SignInResponseDto | null> {
+  async login(certificate: SignInDto): Promise<User | null> {
     const user = await this.usersService.findOneByEmail(certificate.email);
 
     if (user && await bcrypt.compare(certificate.password, user.password)) {
-      const payload: UserClaimsDto = {
-        sub: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        jti: uuidv4(),
-      };
-
-      return plainToInstance(SignInResponseDto, {
-        ...user.toObject(),
-        accessToken: this.jwtService.sign(payload)
-      });
+      return user.toObject();
     }
 
-    throw new UnauthorizedException();
+    return null;
+  }
+  public async authenticateOneTapGoogle(profile: Profile) {
+    const { name, emails, photos } = profile;
+    // const email = emails?.at(0)?.value;
+    console.log("emails", emails);
+    console.log("photos", photos);
+    console.log("name", name);
+  }
+
+  async signToken(user: User): Promise<SignInResponseDto | null> {
+    const payload: UserClaimsDto = {
+      sub: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      jti: uuidv4(),
+    };
+
+    return plainToInstance(SignInResponseDto, {
+      ...user,
+      accessToken: this.jwtService.sign(payload)
+    });
   }
 
   async logout(jti: string) {

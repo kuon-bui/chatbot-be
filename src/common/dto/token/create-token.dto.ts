@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ForModelEnum } from "@enums/for-model.enum";
+import { ForModelEnum } from "@enums";
 
 export class CreateTokenDto {
   @ApiProperty({
