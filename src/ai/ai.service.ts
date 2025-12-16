@@ -13,9 +13,9 @@ import { DeepseekRequestDto, DeepseekRole } from '../common/dto/deepseek/deepsee
 import { ConfigService } from '@nestjs/config';
 import { ChannelRepository } from 'src/channel/channel.repository';
 import { MessageRepository } from 'src/message/message.repository';
-import { SaveMessageDto } from '@dto/index';
+import { SaveMessageDto } from '@dto';
 import { Message } from '@schemas/index';
-import { ForModelEnum } from '@enums/for-model.enum';
+import { ForModelEnum } from '@enums';
 
 @Injectable()
 export class AiService implements OnModuleInit {

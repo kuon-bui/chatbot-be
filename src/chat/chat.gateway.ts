@@ -4,7 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { MessageDto } from '@dto/index';
+import { MessageDto } from '@dto';
 import { Message } from '@schemas/index';
 
 /**

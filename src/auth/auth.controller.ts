@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { SignInDto, SignInResponseDto } from '@dto/index';
+import { SignInDto, SignInResponseDto } from '@dto';
 import { Public } from '@decorators/public.decorator';
+import type { Request } from '@interfaces';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -25,8 +26,13 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized - invalid credentials',
   })
-  signIn(@Body() certificate: SignInDto) {
-    return this.authService.login(certificate);
+  async signIn(@Req() req: Request, @Body() body: SignInDto): Promise<SignInResponseDto | null> {
+    const user = await this.authService.login(body);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return this.authService.signToken(user);
   }
 
   @HttpCode(HttpStatus.OK)

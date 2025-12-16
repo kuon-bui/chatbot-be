@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { BaseSchema } from './base.schema';
-import { Exclude, Transform } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { Token } from './token.schema';
-import { Role } from '@enums/role.enum';
+import { Role } from '@enums';
 
 @Schema()
 export class User extends BaseSchema {

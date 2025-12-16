@@ -4,7 +4,7 @@ import { Token } from 'src/common/schemas/token.schema';
 import { plainToInstance } from 'class-transformer';
 import { RsaService } from 'src/rsa/rsa.service';
 import { Types } from 'mongoose';
-import { CreateTokenDto, UserClaimsDto } from '@dto/index';
+import { CreateTokenDto, UserClaimsDto } from '@dto';
 
 @Injectable()
 export class TokenService {

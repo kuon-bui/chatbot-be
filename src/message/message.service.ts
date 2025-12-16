@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MessageRepository } from './message.repository';
 import { plainToInstance } from 'class-transformer';
 import { Types } from 'mongoose';
-import { SaveMessageDto } from '@dto/index';
+import { SaveMessageDto } from '@dto';
 import { Message } from '@schemas/index';
 
 @Injectable()
