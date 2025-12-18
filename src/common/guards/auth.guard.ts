@@ -12,11 +12,16 @@ import { Request } from '@interfaces';
 import { Types } from 'mongoose';
 import { PassportStrategyTypeEnum } from '@enums';
 import { UserRepository } from '@repositories';
-import { IS_PUBLIC_KEY } from '@decorators';
+import { IS_PUBLIC_KEY, } from '@decorators';
 import { UserClaimsDto } from '@dto';
+import { JIT_CACHE_KEY } from 'src/auth/auth.service';
+import { parseTimeToSeconds } from '@utils';
 
 @Injectable()
 export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
+  private readonly USER_CACHE_PREFIX = 'user:';
+  private readonly USER_CACHE_TTL = parseTimeToSeconds('1h'); // 1 tiếng
+
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
@@ -46,15 +51,27 @@ export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
       const payload = await this.jwtService.verifyAsync<UserClaimsDto>(token);
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      if (await this.cacheManager.get<boolean>(payload.jti)) {
-        throw new UnauthorizedException();
-      }
-      const user = await this.userRepository.findOneById(new Types.ObjectId(payload.sub));
-      if (!user) {
+      if (await this.cacheManager.get<boolean>(`${JIT_CACHE_KEY}${payload.jti}`)) {
         throw new UnauthorizedException();
       }
 
-      request.user = user.toObject();
+      // Kiểm tra cache user trước
+      const userCacheKey = `${this.USER_CACHE_PREFIX}${payload.sub}`;
+      let user = await this.cacheManager.get<any>(userCacheKey);
+
+      if (!user) {
+        // Nếu không có trong cache, query từ database
+        const userDoc = await this.userRepository.findOneById(new Types.ObjectId(payload.sub));
+        if (!userDoc) {
+          throw new UnauthorizedException();
+        }
+
+        user = userDoc.toObject();
+        // Cache user data với TTL 1 tiếng
+        await this.cacheManager.set(userCacheKey, user, this.USER_CACHE_TTL);
+      }
+
+      request.user = user;
       request.userClaims = payload;
     } catch {
       throw new UnauthorizedException();

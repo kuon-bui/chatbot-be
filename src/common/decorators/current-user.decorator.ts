@@ -3,7 +3,7 @@ import { Request } from "@interfaces";
 import { UserClaimsDto } from "@dto";
 import { User } from "@schemas";
 
-export const AuthenticatedUser = createParamDecorator(
+export const CurrentUserClaims = createParamDecorator(
   (data: any, ctx: ExecutionContext): UserClaimsDto => {
     const request = ctx.switchToHttp().getRequest<Request>();
     return request.userClaims;

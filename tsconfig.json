@@ -30,6 +30,7 @@
       "@repositories":["src/common/repositories/index"],
       "@guards":["src/common/guards/index"],
       "@strategies":["src/common/strategies/index"],
+      "@utils":["src/common/utils/index"],
       "@rsa/*":["src/rsa/*"]
     }
   }

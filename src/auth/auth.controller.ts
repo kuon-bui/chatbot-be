@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedExc
 import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { SignInDto, SignInResponseDto } from '@dto';
-import { Public } from '@decorators';
+import { GetJti, Public } from '@decorators';
 import { Profile } from '@interfaces';
 import { GoogleOauthGuard } from '@guards';
 
@@ -56,7 +56,8 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized',
   })
-  logout(@Body('jti') jti: string) {
+  logout(@GetJti() jti: string) {
+    // return jti;
     return this.authService.logout(jti);
   }
 
