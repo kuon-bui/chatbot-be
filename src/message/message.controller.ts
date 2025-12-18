@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody } from '@nestjs/swagger';
 import { MessageService } from './message.service';
-import { AuthenticatedUser } from '@decorators';
+import { CurrentUserClaims } from '@decorators';
 import { SaveMessageDto, UserClaimsDto } from '@dto';
 import { Message } from '@schemas';
 
@@ -53,7 +53,7 @@ export class MessageController {
     description: 'Channel not found',
   })
   async createMessage(
-    @AuthenticatedUser() user: UserClaimsDto,
+    @CurrentUserClaims() user: UserClaimsDto,
     @Param('channelId') channelId: string,
     @Body() messageData: SaveMessageDto,
   ) {

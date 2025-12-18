@@ -10,7 +10,9 @@ import { Account, User } from '@schemas';
 import { Profile } from '@interfaces';
 import { AuthProvider, Role } from '@enums';
 import { AccountRepository, UserRepository } from '@repositories';
-
+import { name } from 'mustache';
+import { parseTimeToSeconds } from '@utils';
+export const JIT_CACHE_KEY = 'jit:';
 @Injectable()
 export class AuthService {
   constructor(
@@ -35,19 +37,25 @@ export class AuthService {
     const payload: UserClaimsDto = {
       sub: user._id.toString(),
       name: user.name,
+      roles: user.roles,
       jti: uuidv4(),
     };
 
     return plainToInstance(SignInResponseDto, {
-      ...user,
+      _id: user._id,
+      name: user.name,
+      roles: user.roles,
       accessToken: this.jwtService.sign(payload)
     });
   }
 
   async logout(jti: string) {
     // Store the jti in Redis with an expiration time equal to the token's TTL
-    const tokenTtlSeconds = this.configService.get<number>('JWT_EXPIRATION_TIME'); // Example: 1 hour, adjust as needed
-    await this.cacheManager.set(jti, true, tokenTtlSeconds);
+    const tokenTtlSeconds = this.configService.get<string>('JWT_EXPIRATION_TIME', "1h"); // Example: 1 hour, adjust as needed
+    console.log(tokenTtlSeconds);
+    const res = await this.cacheManager.set(`${JIT_CACHE_KEY}${jti}`, true, parseTimeToSeconds(tokenTtlSeconds));
+    console.log("Logout cache set result:", res);
+    return { message: 'Logout successful' };
   }
 
   async checkAccountEmail(email: string): Promise<User | null> {
@@ -69,11 +77,14 @@ export class AuthService {
     const payload: UserClaimsDto = {
       sub: existedUser._id.toString(),
       name: existedUser.name,
+      roles: existedUser.roles,
       jti: uuidv4(),
     };
 
     return plainToInstance(SignInResponseDto, {
-      ...existedUser,
+      _id: existedUser._id,
+      name: existedUser.name,
+      roles: existedUser.roles,
       accessToken: this.jwtService.sign(payload)
     });
 
