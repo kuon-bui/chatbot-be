@@ -1,17 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
-import { UserClaimsDto } from '../common/dto/jwt/payload-jwt.dto';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto, SignInResponseDto } from '@dto';
+import { SignInDto, SignInResponseDto, UserClaimsDto } from '@dto';
 import { Account, User } from '@schemas';
-import { AccountRepository } from './auth.repository';
 import { Profile } from '@interfaces';
 import { AuthProvider, Role } from '@enums';
+import { AccountRepository, UserRepository } from '@repositories';
 
 @Injectable()
 export class AuthService {

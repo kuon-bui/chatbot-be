@@ -3,8 +3,8 @@ import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { SignInDto, SignInResponseDto } from '@dto';
 import { Public } from '@decorators';
-import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { Profile } from '@interfaces';
+import { GoogleOauthGuard } from '@guards';
 
 @ApiTags('Authentication')
 @Controller('auth')

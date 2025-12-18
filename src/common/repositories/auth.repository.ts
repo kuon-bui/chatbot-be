@@ -2,23 +2,23 @@ import { AuthProvider } from "@enums";
 import { InjectModel } from "@nestjs/mongoose";
 import { Account, AccountDocument } from "@schemas";
 import { Model } from "mongoose";
+import { BaseRepository } from './base.repository';
 
-export class AccountRepository {
+export class AccountRepository extends BaseRepository<AccountDocument> {
   constructor(
-    @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
-  ) { }
+    @InjectModel(Account.name) model: Model<AccountDocument>,
+  ) {
+    super(model);
+  }
 
   async findOneByEmailAndProvider(provider: AuthProvider, email: string): Promise<Account | null> {
-    return this.accountModel.findOne({
+    return this.model.findOne({
       provider,
       email
     }).populate("user").exec();
   }
 
   async create(account: Account): Promise<AccountDocument> {
-    const newAccount = new this.accountModel({
-      ...account
-    });
-    return newAccount.save();
+    return super.create(account) as Promise<AccountDocument>;
   }
 }

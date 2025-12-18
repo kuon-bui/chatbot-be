@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/common/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
-import { UserRepository } from './user.repository';
 import { CreateUserDto } from '@dto';
 import { AuthProvider, Role } from '@enums';
-import { Account } from '@schemas';
-import { AccountRepository } from 'src/auth/auth.repository';
+import { Account, User } from '@schemas';
+import { AccountRepository, UserRepository } from '@repositories';
 
 @Injectable()
 export class UserService {

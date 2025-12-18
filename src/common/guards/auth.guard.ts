@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator';
-import { UserClaimsDto } from '../../common/dto/jwt/payload-jwt.dto';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { Request } from '@interfaces';
-import { UserRepository } from 'src/user/user.repository';
 import { Types } from 'mongoose';
 import { PassportStrategyTypeEnum } from '@enums';
+import { UserRepository } from '@repositories';
+import { IS_PUBLIC_KEY } from '@decorators';
+import { UserClaimsDto } from '@dto';
 
 @Injectable()
 export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {

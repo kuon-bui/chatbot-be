@@ -1,12 +1,11 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { AuthProvider, Role } from '@enums';
 import { Account, User } from '@schemas';
-import { AccountRepository } from 'src/auth/auth.repository';
+import { AccountRepository, UserRepository } from '@repositories';
 
 @Injectable()
 export class BotUserService implements OnModuleInit {
