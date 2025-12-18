@@ -27,4 +27,8 @@ export class UserRepository extends BaseRepository<UserDocument> {
   async create(user: User): Promise<UserDocument> {
     return super.create(user) as Promise<UserDocument>;
   }
+
+  async findOne(filter: Partial<User>): Promise<UserDocument | null> {
+    return super.findOne(filter) as Promise<UserDocument | null>;
+  }
 }

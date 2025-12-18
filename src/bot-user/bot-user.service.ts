@@ -1,10 +1,9 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { AuthProvider, Role } from '@enums';
-import { Account, User } from '@schemas';
+import { Role } from '@enums';
+import { User } from '@schemas';
 import { AccountRepository, UserRepository } from '@repositories';
 
 @Injectable()
@@ -35,24 +34,19 @@ export class BotUserService implements OnModuleInit {
         return;
       }
 
-      const existingUser = await this.accountRepository.findOneByEmailAndProvider(AuthProvider.Local, aiBotEmail);
+      const existingUser = await this.userRepository.findOne({
+        roles: [Role.Bot],
+        name: this.configService.get<string>('AI_BOT_NAME', 'AI-Bot'),
+      });
 
       if (!existingUser) {
         this.logger.log('AI-Bot user not found. Creating...');
         const aiBotUserDocument = new User();
-        const accountDocument = new Account();
 
         aiBotUserDocument.name = 'AI-Bot';
         aiBotUserDocument.roles = [Role.Bot];
         const aiBotUser = await this.userRepository.create(aiBotUserDocument);
 
-        accountDocument.email = aiBotEmail;
-        accountDocument.password = await bcrypt.hash(aiBotPassword, await bcrypt.genSalt());
-        accountDocument.provider = AuthProvider.Local;
-        accountDocument.user = aiBotUser;
-        console.log(accountDocument);
-        const account = await this.accountRepository.create(accountDocument);
-        console.log(account);
         this.logger.log(`AI-Bot user created successfully with ID: ${aiBotUser._id}`);
         await this.cacheManager.set(this.AI_BOT_CACHE_KEY, aiBotUser._id.toString(), this.CACHE_TTL);
       } else {
@@ -74,12 +68,12 @@ export class BotUserService implements OnModuleInit {
       }
 
       // If not in cache, fetch from DB and renew cache
-      const aiBotEmail = this.configService.get<string>('AI_BOT_EMAIL');
-      if (!aiBotEmail) {
-        return null;
-      }
+      const aiBotName = this.configService.get<string>('AI_BOT_NAME', 'AI-Bot');
 
-      const user = await this.userRepository.findOneByEmail(aiBotEmail);
+      const user = await this.userRepository.findOne({
+        roles: [Role.Bot],
+        name: aiBotName,
+      });
       if (user) {
         const userId = user._id.toString();
         await this.cacheManager.set(this.AI_BOT_CACHE_KEY, userId, this.CACHE_TTL);
