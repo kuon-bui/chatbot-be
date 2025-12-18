@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ChannelRepository } from './channel.repository';
-import { Channel, ChannelDocument } from 'src/common/schemas/channel.schema';
 import { Types } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
+import { ChannelRepository } from '@repositories';
+import { Channel } from '@schemas';
 
 @Injectable()
 export class ChannelService {

@@ -27,6 +27,10 @@
       "@schemas":["src/common/schemas/index"],
       "@dto":["src/common/dto/index"],
       "@interfaces":["src/common/interfaces/index"],
+      "@repositories":["src/common/repositories/index"],
+      "@guards":["src/common/guards/index"],
+      "@strategies":["src/common/strategies/index"],
+      "@rsa/*":["src/rsa/*"]
     }
   }
 }
