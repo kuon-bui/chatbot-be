@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { ChannelRepository } from 'src/channel/channel.repository';
 import { MessageRepository } from 'src/message/message.repository';
 import { SaveMessageDto } from '@dto';
-import { Message } from '@schemas/index';
+import { Message } from '@schemas';
 import { ForModelEnum } from '@enums';
 
 @Injectable()

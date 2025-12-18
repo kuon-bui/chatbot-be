@@ -9,7 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis, { RedisClientOptions } from '@keyv/redis';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/auths/auth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 import { TokenModule } from './token/token.module';
 import { RsaModule } from './rsa/rsa.module';
 import { AiModule } from './ai/ai.module';
