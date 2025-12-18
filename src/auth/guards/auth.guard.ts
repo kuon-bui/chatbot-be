@@ -13,9 +13,10 @@ import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 import { Request } from '@interfaces';
 import { UserRepository } from 'src/user/user.repository';
 import { Types } from 'mongoose';
+import { PassportStrategyTypeEnum } from '@enums';
 
 @Injectable()
-export class AuthGuard extends PassportAuthGuard('jwt') {
+export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
@@ -26,13 +27,12 @@ export class AuthGuard extends PassportAuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log("here");
+    // get the public metadata
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
     if (isPublic) {
-      // 💡 See this condition
       return true;
     }
 

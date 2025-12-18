@@ -4,7 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { Role } from '@enums';
+import { AuthProvider, Role } from '@enums';
+import { Account, User } from '@schemas';
+import { AccountRepository } from 'src/auth/auth.repository';
 
 @Injectable()
 export class BotUserService implements OnModuleInit {
@@ -13,7 +15,8 @@ export class BotUserService implements OnModuleInit {
   private readonly CACHE_TTL = 3600000; // 1 hour in milliseconds
 
   constructor(
-    private readonly userService: UserRepository,
+    private readonly userRepository: UserRepository,
+    private readonly accountRepository: AccountRepository,
     private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
@@ -33,18 +36,24 @@ export class BotUserService implements OnModuleInit {
         return;
       }
 
-      const existingUser = await this.userService.findOneByEmail(aiBotEmail);
+      const existingUser = await this.accountRepository.findOneByEmailAndProvider(AuthProvider.Local, aiBotEmail);
 
       if (!existingUser) {
         this.logger.log('AI-Bot user not found. Creating...');
+        const aiBotUserDocument = new User();
+        const accountDocument = new Account();
 
-        const aiBotUser = await this.userService.create({
-          name: 'AI-Bot',
-          email: aiBotEmail,
-          password: await bcrypt.hash(aiBotPassword, await bcrypt.genSalt()),
-          roles: [Role.Bot],
-        });
+        aiBotUserDocument.name = 'AI-Bot';
+        aiBotUserDocument.roles = [Role.Bot];
+        const aiBotUser = await this.userRepository.create(aiBotUserDocument);
 
+        accountDocument.email = aiBotEmail;
+        accountDocument.password = await bcrypt.hash(aiBotPassword, await bcrypt.genSalt());
+        accountDocument.provider = AuthProvider.Local;
+        accountDocument.user = aiBotUser;
+        console.log(accountDocument);
+        const account = await this.accountRepository.create(accountDocument);
+        console.log(account);
         this.logger.log(`AI-Bot user created successfully with ID: ${aiBotUser._id}`);
         await this.cacheManager.set(this.AI_BOT_CACHE_KEY, aiBotUser._id.toString(), this.CACHE_TTL);
       } else {
@@ -71,7 +80,7 @@ export class BotUserService implements OnModuleInit {
         return null;
       }
 
-      const user = await this.userService.findOneByEmail(aiBotEmail);
+      const user = await this.userRepository.findOneByEmail(aiBotEmail);
       if (user) {
         const userId = user._id.toString();
         await this.cacheManager.set(this.AI_BOT_CACHE_KEY, userId, this.CACHE_TTL);

@@ -1,9 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { SignInDto, SignInResponseDto } from '@dto';
-import { Public } from '@decorators/public.decorator';
-import type { Request } from '@interfaces';
+import { Public } from '@decorators';
+import { GoogleOauthGuard } from './guards/google-auth.guard';
+import { Profile } from '@interfaces';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -26,7 +27,7 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized - invalid credentials',
   })
-  async signIn(@Req() req: Request, @Body() body: SignInDto): Promise<SignInResponseDto | null> {
+  async signIn(@Body() body: SignInDto): Promise<SignInResponseDto | null> {
     const user = await this.authService.login(body);
     if (!user) {
       throw new UnauthorizedException();
@@ -58,4 +59,19 @@ export class AuthController {
   logout(@Body('jti') jti: string) {
     return this.authService.logout(jti);
   }
+
+  @Public()
+  @Get("login/google")
+  @UseGuards(GoogleOauthGuard)
+  loginGoogle() { }
+
+  @Public()
+  @Get("google/callback")
+  @UseGuards(GoogleOauthGuard)
+  googleCallback(@Req() req: any) {
+    console.log("callback");
+    console.log(req.user as Profile);
+    return this.authService.loginGoogle(req.user as Profile);
+  }
+
 }

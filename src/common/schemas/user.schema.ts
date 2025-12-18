@@ -1,29 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { BaseSchema } from './base.schema';
-import { Exclude } from 'class-transformer';
 import { Token } from './token.schema';
 import { Role } from '@enums';
+import { Account } from './account.schema';
 
 @Schema()
 export class User extends BaseSchema {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  email: string;
-
-  @Exclude({
-    toPlainOnly: true,
-  })
-  @Prop()
-  password: string;
-
   @Prop({ type: [String], enum: Role, default: [Role.User] })
   roles: Role[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Token' }] })
   tokens: Token[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Account' }] })
+  accounts: Account[];
 }
 
 export type UserDocument = HydratedDocument<User>;
