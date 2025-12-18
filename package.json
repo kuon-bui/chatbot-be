@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "generate:rsa": "ts-node ./scripts/generate-rsa.ts",
+    "generate:jwt": "ts-node ./scripts/generate-jwt-secret.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
