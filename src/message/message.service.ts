@@ -3,7 +3,7 @@ import { MessageRepository } from './message.repository';
 import { plainToInstance } from 'class-transformer';
 import { Types } from 'mongoose';
 import { SaveMessageDto } from '@dto';
-import { Message } from '@schemas/index';
+import { Message } from '@schemas';
 
 @Injectable()
 export class MessageService {

@@ -23,8 +23,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@enums":["src/common/enums/index"],
-      "@decorators/*":["src/common/decorators/*"],
-      "@schemas/*":["src/common/schemas/*"],
+      "@decorators":["src/common/decorators/index"],
+      "@schemas":["src/common/schemas/index"],
       "@dto":["src/common/dto/index"],
       "@interfaces":["src/common/interfaces/index"],
     }

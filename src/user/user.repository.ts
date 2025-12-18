@@ -22,7 +22,7 @@ export class UserRepository {
     return this.userModel.findById(id).populate('tokens').exec();
   }
 
-  async create(user: CreateUserDto): Promise<UserDocument> {
+  async create(user: User): Promise<UserDocument> {
     const newUser = new this.userModel(user);
     return newUser.save();
   }

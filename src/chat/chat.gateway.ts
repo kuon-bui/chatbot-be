@@ -5,7 +5,7 @@ import { ChatService } from './chat.service';
 import { Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MessageDto } from '@dto';
-import { Message } from '@schemas/index';
+import { Message } from '@schemas';
 
 /**
  * WebSocket Gateway for real-time chat functionality
