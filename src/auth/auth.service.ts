@@ -10,9 +10,9 @@ import { Account, User } from '@schemas';
 import { Profile } from '@interfaces';
 import { AuthProvider, Role } from '@enums';
 import { AccountRepository, UserRepository } from '@repositories';
-import { name } from 'mustache';
 import { parseTimeToSeconds } from '@utils';
-export const JIT_CACHE_KEY = 'jit:';
+export const JIT_CACHE_KEY = 'jit-revoked';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -52,9 +52,8 @@ export class AuthService {
   async logout(jti: string) {
     // Store the jti in Redis with an expiration time equal to the token's TTL
     const tokenTtlSeconds = this.configService.get<string>('JWT_EXPIRATION_TIME', "1h"); // Example: 1 hour, adjust as needed
-    console.log(tokenTtlSeconds);
-    const res = await this.cacheManager.set(`${JIT_CACHE_KEY}${jti}`, true, parseTimeToSeconds(tokenTtlSeconds));
-    console.log("Logout cache set result:", res);
+    await this.cacheManager.set(`${JIT_CACHE_KEY}:${jti}`, true, parseTimeToSeconds(tokenTtlSeconds));
+
     return { message: 'Logout successful' };
   }
 

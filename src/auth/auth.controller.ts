@@ -76,8 +76,6 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login successful', type: SignInResponseDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   googleCallback(@Req() req: any) {
-    console.log("callback");
-    console.log(req.user as Profile);
     return this.authService.loginGoogle(req.user as Profile);
   }
 

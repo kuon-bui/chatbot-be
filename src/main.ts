@@ -7,7 +7,9 @@ import mongoose from 'mongoose';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  mongoose.set('debug', true);
+  if (process.env.DEBUG === 'true') {
+    mongoose.set('debug', true);
+  }
 
   const config = new DocumentBuilder()
     .setTitle('Chatbot API')

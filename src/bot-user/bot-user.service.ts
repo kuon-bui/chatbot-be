@@ -14,7 +14,6 @@ export class BotUserService implements OnModuleInit {
 
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly accountRepository: AccountRepository,
     private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
@@ -25,15 +24,6 @@ export class BotUserService implements OnModuleInit {
 
   private async ensureAiBotUserExists() {
     try {
-      const aiBotEmail = this.configService.get<string>('AI_BOT_EMAIL');
-      if (!aiBotEmail) {
-        return;
-      }
-      const aiBotPassword = this.configService.get<string>('AI_BOT_SYSTEM_PASSWORD');
-      if (!aiBotPassword) {
-        return;
-      }
-
       const existingUser = await this.userRepository.findOne({
         roles: [Role.Bot],
         name: this.configService.get<string>('AI_BOT_NAME', 'AI-Bot'),

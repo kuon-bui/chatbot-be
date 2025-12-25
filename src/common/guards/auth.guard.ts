@@ -51,7 +51,7 @@ export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
       const payload = await this.jwtService.verifyAsync<UserClaimsDto>(token);
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      if (await this.cacheManager.get<boolean>(`${JIT_CACHE_KEY}${payload.jti}`)) {
+      if (await this.cacheManager.get<boolean>(`${JIT_CACHE_KEY}:${payload.jti}`)) {
         throw new UnauthorizedException();
       }
 
