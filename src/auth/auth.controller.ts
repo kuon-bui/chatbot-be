@@ -1,10 +1,21 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { SignInDto, SignInResponseDto } from '@dto';
-import { GetJti, Public } from '@decorators';
+import { CurrentUser, GetJti, Public } from '@decorators';
 import { Profile } from '@interfaces';
-import { GoogleOauthGuard } from '@guards';
+import { GoogleOauthGuard, JwtRefreshAuthGuard } from '@guards';
+import { User } from '@schemas';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -59,6 +70,14 @@ export class AuthController {
   logout(@GetJti() jti: string) {
     // return jti;
     return this.authService.logout(jti);
+  }
+
+  @Public()
+  @Get("renew-token")
+  @UseGuards(JwtRefreshAuthGuard)
+  refreshToken(@GetJti() jti: string, @CurrentUser() user: User) {
+    console.log("renew", user);
+    return this.authService.renewToken(jti, user);
   }
 
   @Public()
