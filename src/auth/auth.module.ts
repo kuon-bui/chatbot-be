@@ -6,7 +6,12 @@ import { PassportModule } from '@nestjs/passport';
 import { Account, AccountSchema } from '@schemas';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AccountRepository } from '@repositories';
-import { GoogleStrategy, JwtStrategy, LocalStrategy } from '@strategies';
+import {
+  GoogleStrategy,
+  JwtRefreshStrategy,
+  JwtStrategy,
+  LocalStrategy
+} from '@strategies';
 
 @Module({
   imports: [
@@ -15,7 +20,7 @@ import { GoogleStrategy, JwtStrategy, LocalStrategy } from '@strategies';
     MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy, AccountRepository],
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy, GoogleStrategy, AccountRepository],
   exports: [AccountRepository],
 })
 export class AuthModule { }

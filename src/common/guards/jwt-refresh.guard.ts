@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
@@ -12,20 +11,16 @@ import { Request } from '@interfaces';
 import { Types } from 'mongoose';
 import { PassportStrategyTypeEnum } from '@enums';
 import { UserRepository } from '@repositories';
-import { IS_PUBLIC_KEY, } from '@decorators';
 import { UserClaimsDto } from '@dto';
 import { JIT_CACHE_KEY } from 'src/auth/auth.service';
-import { parseTimeToSeconds } from '@utils';
 import { JwtInvalidException } from '@exceptions';
-export const USER_CACHE_PREFIX = 'user:';
-export const USER_CACHE_TTL = parseTimeToSeconds('1h'); // 1 tiếng
+import { USER_CACHE_PREFIX, USER_CACHE_TTL } from './auth.guard';
 
 @Injectable()
-export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
+export class JwtRefreshAuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT_REFRESH) {
 
   constructor(
     private jwtService: JwtService,
-    private reflector: Reflector,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly userRepository: UserRepository,
   ) {
@@ -33,15 +28,6 @@ export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // get the public metadata
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -56,7 +42,7 @@ export class AuthGuard extends PassportAuthGuard(PassportStrategyTypeEnum.JWT) {
         throw new UnauthorizedException();
       }
 
-      if (payload.isRefresh) {
+      if (!payload.isRefresh) {
         throw new JwtInvalidException();
       }
 

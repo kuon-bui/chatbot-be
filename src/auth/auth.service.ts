@@ -5,7 +5,12 @@ import { plainToInstance } from 'class-transformer';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto, SignInResponseDto, UserClaimsDto } from '@dto';
+import {
+  SignInDto,
+  SignInResponseDto,
+  TokenResponse,
+  UserClaimsDto,
+} from '@dto';
 import { Account, User } from '@schemas';
 import { Profile } from '@interfaces';
 import { AuthProvider, Role } from '@enums';
@@ -33,20 +38,48 @@ export class AuthService {
     return null;
   }
 
-  async signToken(user: User): Promise<SignInResponseDto | null> {
-    const payload: UserClaimsDto = {
+  generateToken(user: User): TokenResponse {
+    const jit = uuidv4();
+    const payloadToken: UserClaimsDto = {
       sub: user._id.toString(),
+      isRefresh: false,
       name: user.name,
       roles: user.roles,
-      jti: uuidv4(),
+      jti: jit,
+    };
+    const payloadRefreshToken: UserClaimsDto = {
+      sub: user._id.toString(),
+      isRefresh: true,
+      jti: jit,
     };
 
+    const tokenTtlSeconds = this.configService.get<string>('JWT_EXPIRATION_TIME', "1h");
+    const tokenTtlRefreshSeconds = this.configService.get<string>('JWT_REFRESH_EXPIRATION_TIME', "1d");
+
+    return {
+      accessToken: this.jwtService.sign(payloadToken, {
+        expiresIn: parseTimeToSeconds(tokenTtlSeconds),
+      }),
+      refreshToken: this.jwtService.sign(payloadRefreshToken, {
+        expiresIn: parseTimeToSeconds(tokenTtlRefreshSeconds)
+      })
+    } as TokenResponse;
+  }
+
+  async signToken(user: User): Promise<SignInResponseDto> {
     return plainToInstance(SignInResponseDto, {
       _id: user._id,
       name: user.name,
       roles: user.roles,
-      accessToken: this.jwtService.sign(payload)
+      token: this.generateToken(user)
     });
+  }
+
+  async renewToken(jti: string, user: User): Promise<SignInResponseDto> {
+    const tokenTtlSeconds = this.configService.get<string>('JWT_EXPIRATION_TIME', "1h"); // Example: 1 hour, adjust as needed
+    await this.cacheManager.set(`${JIT_CACHE_KEY}:${jti}`, true, parseTimeToSeconds(tokenTtlSeconds));
+
+    return this.signToken(user);
   }
 
   async logout(jti: string) {
@@ -73,20 +106,12 @@ export class AuthService {
       existedUser = await this.createUserGoogleOAuth(profile);
     }
 
-    const payload: UserClaimsDto = {
-      sub: existedUser._id.toString(),
-      name: existedUser.name,
-      roles: existedUser.roles,
-      jti: uuidv4(),
-    };
-
     return plainToInstance(SignInResponseDto, {
       _id: existedUser._id,
       name: existedUser.name,
       roles: existedUser.roles,
-      accessToken: this.jwtService.sign(payload)
+      token: this.generateToken(existedUser)
     });
-
   }
 
   async createUserGoogleOAuth(profile: Profile): Promise<User> {

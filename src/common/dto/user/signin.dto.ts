@@ -6,5 +6,10 @@ export class SignInDto {
 }
 
 export class SignInResponseDto extends User {
+  token: TokenResponse;
+}
+
+export class TokenResponse {
   accessToken: string;
+  refreshToken: string;
 }
