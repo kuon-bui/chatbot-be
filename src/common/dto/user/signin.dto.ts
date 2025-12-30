@@ -1,4 +1,4 @@
-import { User } from '@schemas/index';
+import { User } from '@schemas';
 
 export class SignInDto {
   email: string;
@@ -6,5 +6,10 @@ export class SignInDto {
 }
 
 export class SignInResponseDto extends User {
+  token: TokenResponse;
+}
+
+export class TokenResponse {
   accessToken: string;
+  refreshToken: string;
 }

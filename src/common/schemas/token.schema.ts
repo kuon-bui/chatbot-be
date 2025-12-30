@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { BaseSchema } from "./base.schema";
 import { Exclude, Transform } from "class-transformer";
 import { HydratedDocument, Types } from "mongoose";
-import { ForModelEnum } from "@enums/for-model.enum";
+import { ForModelEnum } from "@enums";
 @Schema()
 export class Token extends BaseSchema {
   @Prop({ required: true })

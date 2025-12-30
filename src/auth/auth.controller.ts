@@ -1,8 +1,21 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { SignInDto, SignInResponseDto } from '@dto/index';
-import { Public } from '@decorators/public.decorator';
+import { SignInDto, SignInResponseDto } from '@dto';
+import { CurrentUser, GetJti, Public } from '@decorators';
+import { Profile } from '@interfaces';
+import { GoogleOauthGuard, JwtRefreshAuthGuard } from '@guards';
+import { User } from '@schemas';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -25,8 +38,13 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized - invalid credentials',
   })
-  signIn(@Body() certificate: SignInDto) {
-    return this.authService.login(certificate);
+  async signIn(@Body() body: SignInDto): Promise<SignInResponseDto | null> {
+    const user = await this.authService.login(body);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return this.authService.signToken(user);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -49,7 +67,35 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized',
   })
-  logout(@Body('jti') jti: string) {
+  logout(@GetJti() jti: string) {
+    // return jti;
     return this.authService.logout(jti);
   }
+
+  @Public()
+  @Get("renew-token")
+  @UseGuards(JwtRefreshAuthGuard)
+  refreshToken(@GetJti() jti: string, @CurrentUser() user: User) {
+    console.log("renew", user);
+    return this.authService.renewToken(jti, user);
+  }
+
+  @Public()
+  @Get("login/google")
+  @UseGuards(GoogleOauthGuard)
+  @ApiOperation({ summary: 'Login with Google (redirect to Google consent)' })
+  @ApiResponse({ status: 302, description: 'Redirect to Google OAuth consent page' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  loginGoogle() { }
+
+  @Public()
+  @Get("google/callback")
+  @UseGuards(GoogleOauthGuard)
+  @ApiOperation({ summary: 'Google OAuth callback - exchange profile for token' })
+  @ApiResponse({ status: 200, description: 'Login successful', type: SignInResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  googleCallback(@Req() req: any) {
+    return this.authService.loginGoogle(req.user as Profile);
+  }
+
 }

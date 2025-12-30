@@ -1,9 +1,9 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody } from '@nestjs/swagger';
 import { MessageService } from './message.service';
-import { AuthenticatedUser } from '@decorators/current-user.decorator';
-import { SaveMessageDto, UserClaimsDto } from '@dto/index';
-import { Message } from '@schemas/index';
+import { CurrentUserClaims } from '@decorators';
+import { SaveMessageDto, UserClaimsDto } from '@dto';
+import { Message } from '@schemas';
 
 @ApiTags('Messages')
 @ApiBearerAuth('JWT-auth')
@@ -53,7 +53,7 @@ export class MessageController {
     description: 'Channel not found',
   })
   async createMessage(
-    @AuthenticatedUser() user: UserClaimsDto,
+    @CurrentUserClaims() user: UserClaimsDto,
     @Param('channelId') channelId: string,
     @Body() messageData: SaveMessageDto,
   ) {

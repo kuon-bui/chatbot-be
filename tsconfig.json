@@ -22,10 +22,17 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@enums/*":["src/common/enums/*"],
-      "@decorators/*":["src/common/decorators/*"],
-      "@schemas/*":["src/common/schemas/*"],
-      "@dto/*":["src/common/dto/*"]
+      "@enums":["src/common/enums/index"],
+      "@decorators":["src/common/decorators/index"],
+      "@schemas":["src/common/schemas/index"],
+      "@dto":["src/common/dto/index"],
+      "@interfaces":["src/common/interfaces/index"],
+      "@repositories":["src/common/repositories/index"],
+      "@guards":["src/common/guards/index"],
+      "@strategies":["src/common/strategies/index"],
+      "@utils":["src/common/utils/index"],
+      "@rsa/*":["src/rsa/*"],
+      "@exceptions":["src/common/exceptions/index"]
     }
   }
 }

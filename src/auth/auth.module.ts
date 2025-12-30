@@ -1,11 +1,26 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
+import { PassportModule } from '@nestjs/passport';
+import { Account, AccountSchema } from '@schemas';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AccountRepository } from '@repositories';
+import {
+  GoogleStrategy,
+  JwtRefreshStrategy,
+  JwtStrategy,
+  LocalStrategy
+} from '@strategies';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    forwardRef(() => UserModule),
+    PassportModule,
+    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
+  ],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy, GoogleStrategy, AccountRepository],
+  exports: [AccountRepository],
 })
 export class AuthModule { }

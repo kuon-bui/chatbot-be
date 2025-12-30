@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { MessageRepository } from './message.repository';
 import { plainToInstance } from 'class-transformer';
 import { Types } from 'mongoose';
-import { SaveMessageDto } from '@dto/index';
-import { Message } from '@schemas/index';
+import { SaveMessageDto } from '@dto';
+import { Message } from '@schemas';
+import { MessageRepository } from '@repositories';
 
 @Injectable()
 export class MessageService {
@@ -12,7 +12,7 @@ export class MessageService {
   ) { }
 
   async createMessage(channelId: string, senderId: string, messageData: SaveMessageDto) {
-    const message = await this.messageRepository.create(
+    const message = await this.messageRepository.createMessage(
       new Types.ObjectId(channelId),
       new Types.ObjectId(senderId),
       messageData,

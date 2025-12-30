@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { AuthenticatedUser } from '@decorators/current-user.decorator';
+import { CurrentUserClaims } from '@decorators';
 import { Types } from 'mongoose';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { UserClaimsDto } from '@dto/index';
+import { UserClaimsDto } from '@dto';
 
 
 @ApiTags('AI')
@@ -38,7 +38,7 @@ export class AiController {
     status: 401,
     description: 'Unauthorized',
   })
-  async translateText(@AuthenticatedUser() user: UserClaimsDto, @Body('text') text: string) {
+  async translateText(@CurrentUserClaims() user: UserClaimsDto, @Body('text') text: string) {
     return this.aiService.translateText(new Types.ObjectId(user.sub), text);
   }
 

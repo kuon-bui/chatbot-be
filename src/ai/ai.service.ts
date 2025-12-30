@@ -1,21 +1,17 @@
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { RsaService } from 'src/rsa/rsa.service';
-import { UserRepository } from 'src/user/user.repository';
-import { DeepseekChoice, DeepSeekResponseDto } from '../common/dto/deepseek/deepseek-response.dto';
 import Mustache from 'mustache';
 import * as fs from 'fs';
 import * as path from 'path';
 import { BotUserService } from 'src/bot-user/bot-user.service';
 import { Types } from 'mongoose';
-import { DeepseekRequestDto, DeepseekRole } from '../common/dto/deepseek/deepseek-request.dto';
 import { ConfigService } from '@nestjs/config';
-import { ChannelRepository } from 'src/channel/channel.repository';
-import { MessageRepository } from 'src/message/message.repository';
-import { SaveMessageDto } from '@dto/index';
-import { Message } from '@schemas/index';
-import { ForModelEnum } from '@enums/for-model.enum';
+import { DeepseekChoice, DeepseekRequestDto, DeepSeekResponseDto, DeepseekRole, SaveMessageDto } from '@dto';
+import { Message } from '@schemas';
+import { ForModelEnum } from '@enums';
+import { RsaService } from '@rsa/rsa.service';
+import { ChannelRepository, MessageRepository, UserRepository } from '@repositories';
 
 @Injectable()
 export class AiService implements OnModuleInit {
@@ -207,7 +203,7 @@ export class AiService implements OnModuleInit {
     });
 
     // Save messages to database
-    const userMessage = await this.messageRepository.create(channel._id, userId, { content: message });
+    const userMessage = await this.messageRepository.createMessage(channel._id, userId, { content: message });
     const aiMessages = await this.messageRepository.saveMany(channel._id, aiBotUserId, newMessage);
 
     return [userMessage.toObject(), ...aiMessages.map(msg => msg.toObject())];

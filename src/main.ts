@@ -1,10 +1,25 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import mongoose from 'mongoose';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  var appOptions: NestApplicationOptions = {
+    cors: {
+      origin: process.env.CORS_ALLOWED_ORIGINS?.split(',') || '*',
+      methods: process.env.CORS_ALLOWED_METHODS?.split(',') || 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      optionsSuccessStatus: 204,
+      preflightContinue: false,
+    },
+  };
+
+  const app = await NestFactory.create(AppModule, appOptions,);
+
+  if (process.env.DEBUG === 'true') {
+    mongoose.set('debug', true);
+  }
+
   const config = new DocumentBuilder()
     .setTitle('Chatbot API')
     .setDescription('API documentation for Chatbot Backend Service')
@@ -38,4 +53,5 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();

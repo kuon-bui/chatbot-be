@@ -9,15 +9,15 @@ import { AuthModule } from './auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis, { RedisClientOptions } from '@keyv/redis';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/auth.guard';
 import { TokenModule } from './token/token.module';
-import { RsaModule } from './rsa/rsa.module';
 import { AiModule } from './ai/ai.module';
 import { HttpModule } from '@nestjs/axios';
 import { ChannelModule } from './channel/channel.module';
 import { MessageModule } from './message/message.module';
 import { BotUserModule } from './bot-user/bot-user.module';
 import { ChatModule } from './chat/chat.module';
+import { AuthGuard } from '@guards';
+import { RsaModule } from '@rsa/rsa.module';
 
 @Module({
   imports: [

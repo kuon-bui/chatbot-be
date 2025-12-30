@@ -1,8 +1,8 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { Channel } from 'src/common/schemas/channel.schema';
-import { AuthenticatedUser } from '@decorators/current-user.decorator';
-import { UserClaimsDto } from '@dto/index';
+import { CurrentUserClaims } from '@decorators';
+import { UserClaimsDto } from '@dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 
 @ApiTags('Channels')
@@ -24,7 +24,7 @@ export class ChannelController {
     status: 401,
     description: 'Unauthorized',
   })
-  async getChannelCurrentUser(@AuthenticatedUser() user: UserClaimsDto): Promise<Channel> {
+  async getChannelCurrentUser(@CurrentUserClaims() user: UserClaimsDto): Promise<Channel> {
     return this.channelService.getChannelCurrentUser(user.sub);
   }
 
@@ -53,7 +53,7 @@ export class ChannelController {
     description: 'Channel not found',
   })
   async changeChannelName(
-    @AuthenticatedUser() user: UserClaimsDto,
+    @CurrentUserClaims() user: UserClaimsDto,
     @Param('id') id: string,
     @Body('name') newName: string
   ): Promise<Channel> {
