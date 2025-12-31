@@ -18,6 +18,7 @@ import { BotUserModule } from './bot-user/bot-user.module';
 import { ChatModule } from './chat/chat.module';
 import { AuthGuard } from '@guards';
 import { RsaModule } from '@rsa/rsa.module';
+import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { RsaModule } from '@rsa/rsa.module';
     MessageModule,
     BotUserModule,
     ChatModule,
+    S3Module,
   ],
   controllers: [AppController],
   providers: [
@@ -79,7 +81,7 @@ import { RsaModule } from '@rsa/rsa.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    },
+    }
   ],
 })
 
