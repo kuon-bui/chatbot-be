@@ -37,6 +37,10 @@ export class AiService implements OnModuleInit {
     await this.scanDirectory(promptsDir, promptsDir);
   }
 
+  public async reloadPrompt() {
+    this.loadPrompts;
+  }
+
   private async scanDirectory(dir: string, baseDir: string) {
     const items = fs.readdirSync(dir);
 
@@ -79,7 +83,7 @@ export class AiService implements OnModuleInit {
     return prompt;
   }
 
-  async translateText(userId: Types.ObjectId, text: string): Promise<DeepseekChoice[]> {
+  async translateText(userId: Types.ObjectId, lang: string, text: string): Promise<DeepseekChoice[]> {
     const userDoc = await this.userRepository.findOneByIdWithTokens(userId);
     if (!userDoc) {
       throw new Error('User not found');
@@ -101,7 +105,7 @@ export class AiService implements OnModuleInit {
       throw new Error(`Prompt not found for key: ${promptKey}`);
     }
 
-    const prompt = Mustache.render(promptTemplate, { text });
+    const prompt = Mustache.render(promptTemplate, { lang, text });
 
     const token = this.rsaService.decrypt(deepSeekToken.token);
     // Call to external AI translation service
