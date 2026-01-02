@@ -32,7 +32,8 @@
       "@strategies":["src/common/strategies/index"],
       "@utils":["src/common/utils/index"],
       "@rsa/*":["src/rsa/*"],
-      "@exceptions":["src/common/exceptions/index"]
+      "@exceptions":["src/common/exceptions/index"],
+      "@migrations-utils":["src/migrations-utils/db"]
     }
   }
 }
