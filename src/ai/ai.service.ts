@@ -16,7 +16,7 @@ import { ChannelRepository, MessageRepository, UserRepository } from '@repositor
 @Injectable()
 export class AiService implements OnModuleInit {
   private readonly PROMPT_CACHE_PREFIX = 'prompt:';
-
+  private readonly apiUrl: string;
   constructor(
     private readonly httpService: HttpService,
     private readonly userRepository: UserRepository,
@@ -26,7 +26,15 @@ export class AiService implements OnModuleInit {
     private readonly configService: ConfigService,
     private readonly messageRepository: MessageRepository,
     private readonly channelRepository: ChannelRepository,
-  ) { }
+  ) {
+    // Call to external AI translation service
+    const apiUrl = this.configService.get<string>('DEEPSEEK_API_URL');
+    if (!apiUrl) {
+      throw new Error('DEEPSEEK_API_URL is not configured');
+    }
+
+    this.apiUrl = apiUrl;
+  }
 
   onModuleInit() {
     this.loadPrompts();
@@ -108,13 +116,9 @@ export class AiService implements OnModuleInit {
     const prompt = Mustache.render(promptTemplate, { lang, text });
 
     const token = this.rsaService.decrypt(deepSeekToken.token);
-    // Call to external AI translation service
-    const apiUrl = this.configService.get<string>('DEEPSEEK_API_URL');
-    if (!apiUrl) {
-      throw new Error('DEEPSEEK_API_URL is not configured');
-    }
 
-    const response = await this.httpService.axiosRef.post<DeepSeekResponseDto>(apiUrl, {
+
+    const response = await this.httpService.axiosRef.post<DeepSeekResponseDto>(this.apiUrl, {
       model: 'deepseek-chat',
       messages: [
         {
@@ -187,15 +191,9 @@ export class AiService implements OnModuleInit {
       role: 'user',
       content: message,
     });
-
-    const apiUrl = this.configService.get<string>('DEEPSEEK_API_URL');
-    if (!apiUrl) {
-      throw new Error('DEEPSEEK_API_URL is not configured');
-    }
-
     const token = this.rsaService.decrypt(deepSeekToken.token);
-    console.log("req:", req);
-    const response = await this.httpService.axiosRef.post<DeepSeekResponseDto>(apiUrl, req, {
+
+    const response = await this.httpService.axiosRef.post<DeepSeekResponseDto>(this.apiUrl, req, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',

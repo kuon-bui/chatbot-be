@@ -25,6 +25,7 @@ export class UserService {
     userDocument.name = createUserDto.name;
     const account = new Account();
     account.email = createUserDto.email;
+    account.username = createUserDto.username;
     account.password = hashedPassword;
     account.provider = AuthProvider.Local;
     userDocument.roles = [Role.User];

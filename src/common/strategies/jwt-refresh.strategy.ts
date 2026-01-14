@@ -26,7 +26,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   async validate(payload: UserClaimsDto) {
-    console.log('jwt test');
     return { userId: payload.sub, name: payload.name, jti: payload.jti };
   }
 }

@@ -29,7 +29,7 @@ export class AuthService {
   ) { }
 
   async login(certificate: SignInDto): Promise<User | null> {
-    const account = await this.accountRepository.findOneByEmailAndProvider(AuthProvider.Local, certificate.email);
+    const account = await this.accountRepository.findOneByUsernameAndProvider(AuthProvider.Local, certificate.username);
 
     if (account && await bcrypt.compare(certificate.password, account.password)) {
       return account.user;

@@ -28,7 +28,7 @@ export class S3Controller {
       new ParseFilePipe({
         validators: [
           // Add validators as needed
-          new MaxFileSizeValidator({ maxSize: 5000000 }), // 5MB limit
+          new MaxFileSizeValidator({ maxSize: 10000000 }), // 10MB limit
           new FileTypeValidator({ fileType: 'image/jpeg|image/png' }),
         ],
       }),
