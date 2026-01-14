@@ -1,13 +1,10 @@
 FROM node:25-alpine AS base
-
 WORKDIR /app
-
+RUN yarn set version 1.22.22
 COPY package.json yarn.lock ./
-
 RUN yarn install --frozen-lockfile
 
 FROM base AS dev
-
 CMD ["yarn", "start:dev"]
 
 FROM base AS builder
@@ -20,9 +17,10 @@ FROM node:25-alpine AS runner
 WORKDIR /app  
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
+RUN yarn set version 1.22.22
 RUN yarn install --production --frozen-lockfile
 COPY --from=builder /app/dist ./dist
-CMD ["node", "dist/main.js"]
+CMD ["yarn", "start:prod"]
 
 EXPOSE 3000
 
