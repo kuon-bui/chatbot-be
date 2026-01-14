@@ -31,8 +31,10 @@ export class S3Service {
 
     if (this.configService.get<string>('ENVIRONMENT') === 'develop') {
       s3Config.endpoint = this.configService.getOrThrow<string>('AWS_S3_ENDPOINT');
-    }
+      s3Config.forcePathStyle = true; // Use path-style URLs (http://minio:9000/bucket/file) instead of virtual-hosted-style
 
+    }
+    console.log(s3Config);
     this.s3Client = new S3Client(s3Config);
   }
 

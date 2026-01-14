@@ -1,7 +1,7 @@
 import { User } from '@schemas';
 
 export class SignInDto {
-  email: string;
+  username: string;
   password: string;
 }
 

@@ -17,13 +17,16 @@ export class Account extends BaseSchema {
   @Prop({ required: true })
   email: string;
 
+  @Prop({ required: true, unique: true })
+  username: string;
+
   @Exclude({
     toPlainOnly: true,
   })
   @Prop()
   password: string;
 
-  @Prop()
+  @Prop({ unique: true, default: null })
   socialId: string;
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
