@@ -201,13 +201,13 @@ export class AiService implements OnModuleInit {
         'Content-Type': 'application/json',
       },
     });
+    const userMessage = await this.messageRepository.createMessage(channel._id, userId, { content: message });
 
     const newMessage = response.data.choices.map((e: DeepseekChoice): SaveMessageDto => {
       return { content: e.message.content };
     });
 
     // Save messages to database
-    const userMessage = await this.messageRepository.createMessage(channel._id, userId, { content: message });
     const aiMessages = await this.messageRepository.saveMany(channel._id, aiBotUserId, newMessage);
 
     return [userMessage.toObject(), ...aiMessages.map(msg => msg.toObject())];

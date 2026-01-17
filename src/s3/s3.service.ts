@@ -31,6 +31,7 @@ export class S3Service {
 
     if (this.configService.get<string>('ENVIRONMENT') === 'develop') {
       s3Config.endpoint = this.configService.getOrThrow<string>('AWS_S3_ENDPOINT');
+      s3Config.forcePathStyle = true;
     }
 
     this.s3Client = new S3Client(s3Config);
